@@ -54,6 +54,9 @@ namespace Timeline.Settings.Menu
             if (latestSpawned) {
                 TMP_Text valueText = latestSpawned.transform.Find("SettingValue").GetComponent<TMP_Text>();
                 valueText.text = $"({Math.Round(value, 2)})";
+
+                Slider slider = latestSpawned.transform.Find("Slider").GetComponent<Slider>();
+                slider.value = val;
             }
         }
     }

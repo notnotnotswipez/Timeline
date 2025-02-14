@@ -86,7 +86,7 @@ namespace Timeline.Patches.PoolPatch
 
         // Some things spawn under the rig and must be waited for
         private static System.Collections.IEnumerator WaitAndSpawnPoolee(Poolee __instance) {
-            for (int i = 0; i < 20; i++) {
+            for (int i = 0; i < 3; i++) {
                 yield return null;
             }
 

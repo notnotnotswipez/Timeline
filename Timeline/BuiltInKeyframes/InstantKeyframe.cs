@@ -14,11 +14,11 @@ namespace Timeline.BuiltInKeyframes
         {
             if (closeness > 0.94)
             {
-                desiredObject.ApplyCameraStateCapture(cameraStateCapture);
+                desiredObject.ApplyCameraStateCapture(cameraStateCapture, false);
             }
             else {
                 if (previousKeyframe != null) {
-                    desiredObject.ApplyCameraStateCapture(previousKeyframe.cameraStateCapture);
+                    desiredObject.ApplyCameraStateCapture(previousKeyframe.cameraStateCapture, true);
                 }
             }
         }

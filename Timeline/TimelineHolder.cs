@@ -450,7 +450,14 @@ namespace Timeline
                         keyframe.selected = false;
                     }
                     selectedKeyframe.selected = true;
+
                     UpdateKeyframeDisplays();
+
+                    // Jump to keyframe
+                    if (Input.GetKey(KeyCode.LeftShift)) {
+                        playhead = existingKeyframe.Key;
+                        _slider.value = playhead;
+                    }
                 }));
                 GameObject selected = keyframeDisplay.transform.Find("SelectedBorder").gameObject;
                 selected.SetActive(existingKeyframe.Value.selected);
@@ -490,7 +497,7 @@ namespace Timeline
 
             if (useWorldScene)
             {
-                worldPlayer.Stop(true);
+                worldPlayer.Stop(false, false);
                 worldPlayer.Play(playhead, true, TimelineAudioManager.AttemptLoad(GlobalSettings.referenceTrackName));
             }
         }
@@ -529,7 +536,7 @@ namespace Timeline
             }
 
             TimeSpan goalTime = TimeSpan.FromSeconds(playhead);
-            _timeDisplay.text = string.Format("{0:D2}:{1:D2}:{2:D2}", goalTime.Minutes, goalTime.Seconds, goalTime.Milliseconds);
+            _timeDisplay.text = string.Format("{0:D2}:{1:D2}.{2:D2}", goalTime.Minutes, goalTime.Seconds, goalTime.Milliseconds);
             
             if (playhead > length)
             {
@@ -642,6 +649,11 @@ namespace Timeline
 
         public void MakeKeyframeAtPlayhead(KeyframeTypes types)
         {
+            // Remove existing keyframe at playhead
+            if (keyframes.ContainsKey(playhead)) {
+                keyframes.Remove(playhead);
+            }
+
             try
             {
                 switch (types)

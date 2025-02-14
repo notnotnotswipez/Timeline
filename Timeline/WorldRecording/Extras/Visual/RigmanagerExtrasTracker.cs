@@ -60,6 +60,7 @@ namespace Timeline.WorldRecording.Extras.Visual
 
 
             GameObject spawnedBodyLog = GameObject.Instantiate(RuntimeCapturedAssets.bodyLog, emptySpawner.transform);
+            spawnedBodyLog.SetActive(true);
 
             spawnedObjects.Add(spawnedRightHolster);
             spawnedObjects.Add(spawnedLeftHolster);

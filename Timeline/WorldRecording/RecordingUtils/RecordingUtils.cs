@@ -22,7 +22,7 @@ namespace Timeline.WorldRecording.Utils
 
         public static MarrowEntity GetEntityFromObject(GameObject gameObject) {
             
-            return gameObject.GetComponentInParent<MarrowEntity>();
+            return gameObject.GetComponentInParent<MarrowEntity>(true);
         }
 
         public static T GetMarrowEntityRecorderFromGameObject<T>(GameObject gameObject, bool createIfNonExistant = false) where T : MarrowEntityRecorder {

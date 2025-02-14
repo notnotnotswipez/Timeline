@@ -30,13 +30,13 @@ namespace Timeline.BuiltInKeyframes
                     rotationZ = interpolatedRotation.eulerAngles.z,
                     fov = Mathf.Lerp(previousKeyframe.cameraStateCapture.fov, cameraStateCapture.fov, closeness)
                 };
-                desiredObject.ApplyCameraStateCapture(interpolatedState);
+                desiredObject.ApplyCameraStateCapture(interpolatedState, true);
             }
             else
             {
                 if (closeness > 0.9)
                 {
-                    desiredObject.ApplyCameraStateCapture(cameraStateCapture);
+                    desiredObject.ApplyCameraStateCapture(cameraStateCapture, true);
                 }
             }
         }

@@ -127,14 +127,14 @@ namespace Timeline.WorldRecording
             }
         }
 
-        public void Stop(bool totalWipe = true)
+        public void Stop(bool totalWipe = true, bool clearEvents = true)
         {
             playing = false;
             paused = false;
 
             FinishRecording();
 
-            ClearScene(totalWipe);
+            ClearScene(totalWipe, clearEvents);
 
 
             TimelineLogger.Debug("Stopped timeline playback. Scene length: " + totalSceneLength + " and playhead: " + playHead);
@@ -382,32 +382,36 @@ namespace Timeline.WorldRecording
                 }
 
                 if (recorder.initialized) {
+
+                    bool isSimpleSpawn = false;
+
                     if (recorder is SimpleSpawnRecorder) {
-                        continue;
+                        isSimpleSpawn = true;
                     }
+
                     // This means a replay was triggered, and the object that was supposed to only exist after a certain point (A Magazine or something) exists before its creation. Odd phrase!
                     if (recorder.initTime > sceneTime)
                     {
                         recorder.OnPlaybackCompleted();
                         recorder.initialized = false;
+
+                        if (isSimpleSpawn) {
+                            // 0.3 is a fine margin
+                            if (recorder.initTime - sceneTime < 0.3f)
+                            {
+                                // It was scrubbed and we just went past it
+                                recorder.OnInitializedPlayback();
+                            }
+                        }
                     }
 
-                    //recorder.CheckAndRunEvents(sceneTime);
-                    recorder.Playback(sceneTime);
-                }
-            }
+                    if (isSimpleSpawn)
+                    {
+                        continue;
+                    }
 
-            // Check events after everything was probably initialized
-            foreach (ObjectRecorder recorder in playbackRecorders)
-            {
-                if (recorder.takeLength < sceneTime)
-                {
-                    continue;
-                }
-
-                if (recorder.initialized)
-                {
                     recorder.CheckAndRunEvents(sceneTime);
+                    recorder.Playback(sceneTime);
                 }
             }
         }
@@ -427,7 +431,7 @@ namespace Timeline.WorldRecording
             }
         }
 
-        public void ClearScene(bool totalWipe) {
+        public void ClearScene(bool totalWipe, bool clearEvents) {
             foreach (ObjectRecorder recorder in playbackRecorders)
             {
                 if (recorder.initialized)
@@ -436,8 +440,10 @@ namespace Timeline.WorldRecording
                         recorder.OnPlaybackCompleted();
                         recorder.initialized = false;
                     }
-                    
-                    recorder.MarkAllEventsAsNotRun();
+
+                    if (clearEvents) {
+                        recorder.MarkAllEventsAsNotRun();
+                    }
                 }
             }
         }

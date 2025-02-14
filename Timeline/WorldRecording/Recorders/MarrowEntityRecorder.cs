@@ -386,6 +386,14 @@ namespace Timeline.WorldRecording.Recorders
 
                 }
             }
+
+            Magazine mag = go.GetComponentInChildren<Magazine>();
+            if (mag) {
+
+                // Timeline handles the bullet art
+                mag.HideBulletArt();
+                
+            }
         }
 
         private void EnableProblematicComponents(GameObject go) {
@@ -634,6 +642,7 @@ namespace Timeline.WorldRecording.Recorders
 
         public override void OnRecordingCompleted()
         {
+            playbackEntity = null;
             ClearPins();
             OnComponentManagersRecordingCompleted();
 
@@ -694,10 +703,13 @@ namespace Timeline.WorldRecording.Recorders
 
                 if (marrowEntityRecorder.lastEntityRecorderParent != null)
                 {
-                    lastParent = marrowEntityRecorder.targetObject.transform.parent;
-                    localPos = marrowEntityRecorder.targetObject.transform.localPosition;
-                    localRot = marrowEntityRecorder.targetObject.transform.localRotation;
-                    isPinned = true;
+                    if (marrowEntityRecorder.targetObject) {
+                        lastParent = marrowEntityRecorder.targetObject.transform.parent;
+                        localPos = marrowEntityRecorder.targetObject.transform.localPosition;
+                        localRot = marrowEntityRecorder.targetObject.transform.localRotation;
+                        isPinned = false;
+                    }
+                    
                 }
 
                 WorldPlayer.Instance.OverrideRecording(entityRecorder);

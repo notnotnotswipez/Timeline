@@ -1,4 +1,5 @@
 ﻿using Il2CppSLZ.Marrow.Interaction;
+using Il2CppSLZ.Marrow.SceneStreaming;
 using MelonLoader;
 using System;
 using System.Collections.Generic;
@@ -20,11 +21,12 @@ namespace Timeline.WorldRecording.StateCapturers
         public static float velocityStrengthMult = 9f;
 
         MarrowBody cachedBody;
+
+        Vector3 lastPosition = Vector3.zero;
         public override byte SerializeableID => (byte) TimelineSerializedTypes.RIGIDBODY_CAPTURER;
 
         public RigidbodyCapturer(Rigidbody targetObject) : base(targetObject.gameObject)
         {
-
             isKinematic = targetObject.isKinematic;
 
             // It better have one!
@@ -120,7 +122,13 @@ namespace Timeline.WorldRecording.StateCapturers
                 return;
             }
 
+            if (lastPosition == Vector3.zero) {
+                lastPosition = targetPos;
+            }
+
             body.velocity = delta * velocityStrengthMult;
+
+            lastPosition = targetPos;
 
             Quaternion rotToTarget = targetRot * Quaternion.Inverse(body.rotation);
             rotToTarget.ToAngleAxis(out float angle, out Vector3 axis);

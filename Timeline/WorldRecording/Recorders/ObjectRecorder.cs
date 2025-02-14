@@ -1,5 +1,4 @@
-﻿using Il2Cpp;
-using MelonLoader;
+﻿using MelonLoader;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -204,7 +203,9 @@ namespace Timeline.WorldRecording.Recorders
         public void CheckAndRunEvents(float sceneTime) {
 
             RecordingEvent lastEvent = null;
-            RecordingEvent lastRanEvent = null;
+            bool wentBackInTime = false;
+
+            
 
             foreach (var recordingEvent in recordingEvents) {
                 if (recordingEvent.Key < sceneTime)
@@ -214,20 +215,41 @@ namespace Timeline.WorldRecording.Recorders
                         lastEvent = recordingEvent.Value;
                         break;
                     }
-                    else {
-                        lastRanEvent = recordingEvent.Value;
-                    }
                 }
                 else {
+
+                    // This event was triggered, but we haven't gotten there yet. We went back.
                     if (recordingEvent.Value.ranEvent) {
                         recordingEvent.Value.ranEvent = false;
+                        wentBackInTime = true;
+                    }
+                }
+            }
 
-                        if (lastRanEvent != null) {
-                            
-                            lastRanEvent.RunEvent(this);
-                            lastRanEvent = null;
+            if (wentBackInTime) {
+
+                // Runs the latest event of each type again, to catchup
+
+                Dictionary<byte, RecordingEvent> latestEventsOfTypes = new Dictionary<byte, RecordingEvent>();
+                foreach (var recordingEvent in recordingEvents)
+                {
+                    if (recordingEvent.Key < sceneTime)
+                    {
+                        if (recordingEvent.Value.ranEvent)
+                        {
+                            if (latestEventsOfTypes.ContainsKey(recordingEvent.Value.EventID))
+                            {
+                                latestEventsOfTypes[recordingEvent.Value.EventID] = recordingEvent.Value;
+                            }
+                            else {
+                                latestEventsOfTypes.Add(recordingEvent.Value.EventID, recordingEvent.Value);
+                            }
                         }
                     }
+                }
+
+                foreach (var latestEvent in latestEventsOfTypes.Values) {
+                    latestEvent.RunEvent(this);
                 }
             }
 

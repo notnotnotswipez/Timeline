@@ -448,6 +448,12 @@ namespace Timeline.WorldRecording.Recorders
                 if (latestMarrowEntityRecorderPin != null) {
                     SetMarrowRecorderAnchor(latestMarrowEntityRecorderPin);
                 }
+
+                // Sometimes playback avatars have poor bounding boxes, sucks to turn this on, but the show must go on.
+                // Without floating bodyparts depending on the camera angle.
+                foreach (var skinnedMesh in avatar.GetComponentsInChildren<SkinnedMeshRenderer>()) {
+                    skinnedMesh.updateWhenOffscreen = true;
+                }
             });
 
             avatarCrate.LoadAsset(action);

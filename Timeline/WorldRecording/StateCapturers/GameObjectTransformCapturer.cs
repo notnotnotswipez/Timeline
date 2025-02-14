@@ -16,8 +16,8 @@ namespace Timeline.WorldRecording.StateCapturers
         public Transform lastAnchor;
         public Transform anchor;
 
-        Vector3 lastPosition;
-        Vector3 lastRotation;
+        Vector3 lastLocalPosition;
+        Quaternion lastLocalRotation;
 
         private const float distanceMargin = 0.00005f;
 
@@ -83,8 +83,8 @@ namespace Timeline.WorldRecording.StateCapturers
                 savedRot = relRot;
             }
 
-            lastPosition = savedPos;
-            lastRotation = rotEul;
+            lastLocalPosition = targetTransform.localPosition;
+            lastLocalRotation = targetTransform.localRotation;
 
             TransformFrame frame = new TransformFrame() {
                 position = savedPos,

@@ -37,10 +37,19 @@ namespace Timeline.CameraRelated
         {
         }
 
-        public void ApplyCameraStateCapture(CameraStateCapture toApply)
+        public void ApplyCameraStateCapture(CameraStateCapture toApply, bool lerp)
         {
-            transform.position = new Vector3(toApply.positionX, toApply.positionY, toApply.positionZ);
-            transform.rotation = Quaternion.Euler(toApply.rotationX, toApply.rotationY, toApply.rotationZ);
+            Vector3 targetPosition = new Vector3(toApply.positionX, toApply.positionY, toApply.positionZ);
+            Quaternion targetRot = Quaternion.Euler(toApply.rotationX, toApply.rotationY, toApply.rotationZ);
+
+            float lerpTime = 1;
+
+            if (lerp) {
+                lerpTime = lerpSpeed * TimelineMainClass.lastDeltaTime;
+            }
+
+            transform.position = Vector3.Slerp(transform.position, targetPosition, lerpTime);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, lerpTime);
             camera.fieldOfView = toApply.fov;
         }
 
@@ -55,6 +64,9 @@ namespace Timeline.CameraRelated
             camera.gameObject.SetActive(true);
 
             GameObject.Destroy(gameObject.GetComponentInChildren<SmoothFollower>(true));
+            
+            // So it can listen, overrides the players one while the camera is active. But its the best we can do
+            camera.gameObject.AddComponent<AudioListener>();
 
             // Init at player head rather than 0, 0, 0.
             gameObject.transform.position = Player.RigManager.physicsRig.m_head.transform.position;
@@ -111,6 +123,24 @@ namespace Timeline.CameraRelated
                 LockMouse(!cursorLocked);
             }
 
+            if (Input.GetKey(KeyCode.LeftControl))
+            {
+                if (Input.GetKeyDown(KeyCode.R))
+                {
+                    fov = 60;
+                }
+
+                if (Input.GetKeyDown(KeyCode.T))
+                {
+                    roll = 0;
+                    holder.GetSettingPanelInstance<CameraPanel>().rollSetting.SetValue(0);
+                }
+
+                fov += Input.mouseScrollDelta.y;
+                fov = Mathf.Clamp(fov, minFov, maxFov);
+                camera.fieldOfView = fov;
+            }
+
             if (!controlling || (holder.playing && !retainControl))
             {
                 desiredPosition = transform.position;
@@ -164,24 +194,6 @@ namespace Timeline.CameraRelated
                 {
                     speed = 0;
                 }
-            }
-
-
-            if (Input.GetKey(KeyCode.LeftControl))
-            {
-                if (Input.GetKeyDown(KeyCode.R))
-                {
-                    fov = 60;
-                }
-
-                if (Input.GetKeyDown(KeyCode.T)) {
-                    roll = 0;
-                    holder.GetSettingPanelInstance<CameraPanel>().rollSetting.SetValue(0);
-                }
-
-                fov += Input.mouseScrollDelta.y;
-                fov = Mathf.Clamp(fov, minFov, maxFov);
-                camera.fieldOfView = fov;
             }
 
             transform.position = Vector3.Lerp(transform.position, desiredPosition, TimelineMainClass.lastDeltaTime * lerpSpeed);
