@@ -30,7 +30,7 @@ namespace Timeline.WorldRecording
         public static bool paused = false;
 
         // 0.1 is pretty good, timestep is necessary as recording every frame is unnecessary and wasteful! (300 fps recording 55 bones every frame gets large fast) Regarding storage and memory usage
-        public const float rateOfRecord = 0.1f;
+        public const float rateOfRecord = 0.05f;
         private float recordTime = rateOfRecord;
 
         public static WorldPlayer Instance;
@@ -354,8 +354,6 @@ namespace Timeline.WorldRecording
         }
 
         public void UpdateScene(float sceneTime) {
-
-            // We make a copy because sometimes the playbackrecorders get modified during scene updates.
             foreach (ObjectRecorder recorder in playbackRecorders)
             {
                 // They have no more data, they do not need to update.

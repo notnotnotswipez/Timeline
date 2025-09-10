@@ -127,6 +127,13 @@ namespace Timeline.WorldRecording.Recorders
                     AddEvent(WorldPlayer.playHead, new GunEvent(GunEventTypes.SLIDE_GRAB));
                 }
             });
+
+            recordingGun.slideVirtualController.OnSlideReturned += new System.Action(() => {
+                if (recording)
+                {
+                    AddEvent(WorldPlayer.playHead, new GunEvent(GunEventTypes.SLIDE_RETURN));
+                }
+            });
         }
 
         public override void OnOverrideStart(float sceneTime)

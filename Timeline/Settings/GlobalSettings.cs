@@ -68,7 +68,7 @@ namespace Timeline.Settings
         private static void UpdateStoredValues() {
             transferActorProp = MP_transferActorProp.Value;
             recordAvatar= MP_recordAvatar.Value;
-            useWorldObject = MP_useWorldObject.Value;
+            //useWorldObject = MP_useWorldObject.Value;
             recordMicrophoneClip = MP_recordMicrophoneClip.Value;
             moveMouthToMicrophone = MP_moveMouthToMicrophone.Value;
             hidePlaybackPouches = MP_hidePlaybackPouches.Value;

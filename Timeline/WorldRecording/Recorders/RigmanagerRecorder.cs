@@ -85,9 +85,9 @@ namespace Timeline.WorldRecording.Recorders
                 return;
             }
 
-            if (recordingRigManager.physicsRig.rbFeet.IsSleeping()) {
+            /*if (recordingRigManager.physicsRig..IsSleeping()) {
                 return;
-            }
+            }*/
 
             foreach (var transformCaptures in avatarTransformCapturers)
             {
@@ -344,7 +344,7 @@ namespace Timeline.WorldRecording.Recorders
 
         public override void OnInitializedRecording(UnityEngine.Object rootObject)
         {
-            if (GlobalSettings.recordMicrophoneClip) {
+            if (GlobalSettings.recordMicrophoneClip && Microphone.devices.Count > 0) {
                 StartMicrophoneRecording();
             }
 
@@ -451,7 +451,7 @@ namespace Timeline.WorldRecording.Recorders
 
                 // Sometimes playback avatars have poor bounding boxes, sucks to turn this on, but the show must go on.
                 // Without floating bodyparts depending on the camera angle.
-                foreach (var skinnedMesh in avatar.GetComponentsInChildren<SkinnedMeshRenderer>()) {
+                foreach (var skinnedMesh in avatar.GetComponentsInChildren<SkinnedMeshRenderer>(true)) {
                     skinnedMesh.updateWhenOffscreen = true;
                 }
             });

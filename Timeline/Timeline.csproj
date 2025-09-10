@@ -9,11 +9,13 @@
 
   <ItemGroup>
     <None Remove="Resources\timeline.assets" />
+    <None Remove="Resources\timeline.quest.assets" />
     <None Remove="WorldRecording\Recorders\MarrowEntityRecorder.cs~RFaa8bab0.TMP" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Resources\timeline.assets" />
+    <EmbeddedResource Include="Resources\timeline.quest.assets" />
   </ItemGroup>
 
   <ItemGroup>

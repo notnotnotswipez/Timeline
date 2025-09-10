@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using BoneLib;
 using Il2CppSystem;
 using Il2CppTMPro;
 using MelonLoader;
@@ -103,6 +104,11 @@ namespace Timeline
         {
             this.controller = controller;
             controller.holder = this;
+        }
+
+        public TimelineHolder()
+        {
+
         }
 
         public void RegisterSettings()
@@ -229,6 +235,11 @@ namespace Timeline
         public void StartUI()
         {
             worldPlayer = new WorldPlayer();
+
+            if (HelperMethods.IsAndroid()) {
+                return;
+            }
+
             uiHolderEventSystem = GameObject.Instantiate(TimelineAssets.timelineUi);
             EventSystem eventSystem = uiHolderEventSystem.GetComponent<EventSystem>();
             StandaloneInputModule standaloneInputModule = uiHolderEventSystem.GetComponent<StandaloneInputModule>();
@@ -520,6 +531,7 @@ namespace Timeline
         }
 
         public bool IgnoreUIInputs() {
+            
             return nameField.isFocused;
         }
         

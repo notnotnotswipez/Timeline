@@ -53,9 +53,7 @@ namespace Timeline
             }
             else
             {
-                TimelineLogger.Error("This mod is not supported on Quest/LemonLoader! Skipping initialization...");
-                HarmonyInstance.UnpatchSelf();
-                return;
+                uiBundle = AssetBundle.LoadFromMemory(EmbeddedResourceHelper.GetResourceBytes("timeline.quest.assets"));
             }
 
             TimelineAssets.LoadAssets(uiBundle);
@@ -83,14 +81,22 @@ namespace Timeline
         private void InitializeTimeline() {
             RuntimeCapturedAssets.CaptureAssets();
 
-            GameObject spectatorCamera = uiRig.transform.parent.Find("Spectator Camera").gameObject;
-            GameObject dupedCamera = GameObject.Instantiate(spectatorCamera);
-            CameraController controller = dupedCamera.AddComponent<CameraController>();
-            Camera camera = dupedCamera.GetComponentInChildren<Camera>(true);
-            controller.camera = camera;
-            camera.gameObject.SetActive(true);
-            camera.depth = 100;
-            timelineHolder = new TimelineHolder(controller);
+            if (!HelperMethods.IsAndroid())
+            {
+
+                GameObject spectatorCamera = uiRig.transform.parent.Find("Spectator Camera").gameObject;
+                GameObject dupedCamera = GameObject.Instantiate(spectatorCamera);
+                CameraController controller = dupedCamera.AddComponent<CameraController>();
+                Camera camera = dupedCamera.GetComponentInChildren<Camera>(true);
+                controller.camera = camera;
+                camera.gameObject.SetActive(true);
+                camera.depth = 100;
+                timelineHolder = new TimelineHolder(controller);
+            }
+            else {
+                timelineHolder = new TimelineHolder();
+            }
+           
             timelineHolder.StartUI();
             TimelineLogger.Debug("UI Started!");
         }
@@ -123,39 +129,44 @@ namespace Timeline
             {
                 TimerManager.Update();
 
-                bool ignoreUI = timelineHolder.IgnoreUIInputs();
+                if (!HelperMethods.IsAndroid()) {
+                    bool ignoreUI = timelineHolder.IgnoreUIInputs();
 
-                if (!ignoreUI) {
-
-                    if (Input.GetKeyDown(KeyCode.F4))
+                    if (!ignoreUI)
                     {
-                        timelineHolder.HideAll(!timelineHolder.isHiddenCompletely);
-                    }
 
-                    if (Input.GetKeyDown(KeyCode.Space) && !timelineHolder.isHiddenCompletely)
-                    {
-                        if (timelineHolder.playing)
+                        if (Input.GetKeyDown(KeyCode.F4))
                         {
-                            timelineHolder.Pause();
+                            timelineHolder.HideAll(!timelineHolder.isHiddenCompletely);
                         }
-                        else
-                        {
-                            timelineHolder.Play();
-                        }
-                    }
 
-                    if (!timelineHolder.isHiddenCompletely)
-                    {
-                        if (Input.GetKeyDown(KeyCode.H))
+                        if (Input.GetKeyDown(KeyCode.Space) && !timelineHolder.isHiddenCompletely)
                         {
-                            timelineHolder.HideUI(!timelineHolder.isUiHidden);
+                            if (timelineHolder.playing)
+                            {
+                                timelineHolder.Pause();
+                            }
+                            else
+                            {
+                                timelineHolder.Play();
+                            }
+                        }
+
+                        if (!timelineHolder.isHiddenCompletely)
+                        {
+                            if (Input.GetKeyDown(KeyCode.H))
+                            {
+                                timelineHolder.HideUI(!timelineHolder.isUiHidden);
+                            }
                         }
                     }
                 }
-                
 
                 timelineHolder.worldPlayer.Update();
-                timelineHolder.Update();
+
+                if (!HelperMethods.IsAndroid()) {
+                    timelineHolder.Update();
+                }
             }
         }
     }

@@ -202,7 +202,8 @@ namespace Timeline.Patches.Rigmanager
                     }
 
                     // Playback, we take control.
-                    if (!marrowEntityRecorder.recording && GlobalSettings.transferActorProp)
+                    // ONLY IF its not currently pinned to anything. If it is, its either part of a larger thing which is what should REALLY be grabbed, not the other thing.
+                    if (!marrowEntityRecorder.recording && GlobalSettings.transferActorProp && !marrowEntityRecorder.hasPin)
                     {
                         TimelineMainClass.timelineHolder.worldPlayer.OverrideRecording(marrowEntityRecorder);
                     }

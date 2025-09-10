@@ -45,11 +45,12 @@ namespace Timeline.WorldRecording.Utils
 
                         MarrowEntityRecorder recorderCreated = (MarrowEntityRecorder) Activator.CreateInstance(properRecorderType);
                         recorderCreated.useWorldEntity = GlobalSettings.useWorldObject;
-                        recorderCreated.recording = true;
+                        
                         recorderCreated.scale = marrowEntity.transform.localScale;
                         recorderCreated.OnInitializedRecording(marrowEntity);
 
                         // Capture the first frame it was ever marked as recorded because otherwise it might be slightly late due to the timestep recording process
+                        recorderCreated.recording = true;
                         recorderCreated.ForceCapture(0);
 
                         TryAddRecorderComponentsToBodies(marrowEntity);
@@ -153,6 +154,24 @@ namespace Timeline.WorldRecording.Utils
                     recorder.OnInitializedRecording(Player.RigManager);
 
                     TimelineMainClass.timelineHolder.worldPlayer.AddRecorderToRecord(recorder);
+
+                    if (Player.LeftHand.HasAttachedObject()) {
+                        MarrowEntityRecorder marrowEntityRecorder = RecordingUtils.GetMarrowEntityRecorderFromGameObject<MarrowEntityRecorder>(Player.LeftHand.m_CurrentAttachedGO, true);
+
+                        if (marrowEntityRecorder != null) {
+                            marrowEntityRecorder.PinToAvailableActorBone(recorder, HumanBodyBones.LeftHand);
+                        }
+                        
+                    }
+
+                    if (Player.RightHand.HasAttachedObject())
+                    {
+                        MarrowEntityRecorder marrowEntityRecorder = RecordingUtils.GetMarrowEntityRecorderFromGameObject<MarrowEntityRecorder>(Player.RightHand.m_CurrentAttachedGO, true);
+                        if (marrowEntityRecorder != null)
+                        {
+                            marrowEntityRecorder.PinToAvailableActorBone(recorder, HumanBodyBones.RightHand);
+                        }
+                    }
 
                     WorldPlayer.currentRigmanagerRecorder = recorder;
                 }

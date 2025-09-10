@@ -115,7 +115,7 @@ namespace Timeline.WorldRecording.StateCapturers
             }
             var delta = targetPos - body.position;
 
-            if (delta.sqrMagnitude > 6) {
+            if (delta.sqrMagnitude > 20) {
                 body.position = targetPos;
                 body.rotation = targetRot;
                 body.velocity = Vector3.zero;

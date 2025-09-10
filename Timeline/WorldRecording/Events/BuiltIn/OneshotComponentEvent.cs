@@ -64,6 +64,12 @@ namespace Timeline.WorldRecording.Events.BuiltIn
 
                     marrowEntityRecorder.FetchComponentManager<SLZLaserPointerComponentManager>().ToggleLaser(realIndex, activeState);
                     break;
+                case ComponentOneshots.SIMPLE_SFX:
+                    byte sfxIndex = ((byte) (secondaryData / 5));
+                    byte clipIndex = (byte) (secondaryData % 5);
+
+                    marrowEntityRecorder.FetchComponentManager<SimpleSFXComponentManager>().PlaySound(sfxIndex, clipIndex);
+                    break;
             }
         }
 
@@ -72,6 +78,7 @@ namespace Timeline.WorldRecording.Events.BuiltIn
 
     public enum ComponentOneshots : byte {
         BEHAVIORBASENAV_KILL = 0,
-        LASER_TOGGLE = 1
+        LASER_TOGGLE = 1,
+        SIMPLE_SFX = 2
     }
 }

@@ -241,11 +241,11 @@ namespace Timeline.Menu
                 GlobalSettings.Save();
             });
 
-            page.CreateBool("Use World Object", Color.yellow, GlobalSettings.useWorldObject, (b) =>
+            /*page.CreateBool("Use World Object", Color.yellow, GlobalSettings.useWorldObject, (b) =>
             {
                 GlobalSettings.useWorldObject = b;
                 GlobalSettings.Save();
-            });
+            });*/
 
             page.CreateBool("Hide Bodylogs", Color.yellow, GlobalSettings.hidePlaybackBodylog, (b) =>
             {

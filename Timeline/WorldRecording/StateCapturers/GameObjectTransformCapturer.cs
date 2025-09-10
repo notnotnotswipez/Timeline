@@ -111,6 +111,15 @@ namespace Timeline.WorldRecording.StateCapturers
             return Vector3.zero;
         }
 
+        public float GetFirstAvailableTime() {
+            foreach (var frame in frames)
+            {
+                return frame.Value.time;
+            }
+
+            return 0f;
+        }
+
         public Quaternion GetFirstAvailableRotation()
         {
 
@@ -155,6 +164,9 @@ namespace Timeline.WorldRecording.StateCapturers
             bool foundPrev = false;
             bool foundNext = false;
 
+            float firstEverTime = GetFirstAvailableTime();
+            
+
             foreach (var transformKeyframe in frames)
             {
                 if (transformKeyframe.Key > sceneTime)
@@ -197,7 +209,7 @@ namespace Timeline.WorldRecording.StateCapturers
                     nextFrameRot = newRot;
                 }
 
-                if (!foundPrev)
+                if (!foundPrev || Math.Abs(firstEverTime - sceneTime) < 0.3f)
                 {
                     
                     if (updatePos) {
@@ -234,7 +246,7 @@ namespace Timeline.WorldRecording.StateCapturers
                     float posDiff = GetMargin(prevFramePos, nextFramePos);
 
                     // We are clearly missing ALOT of data so we should preserve the position its at until it actually updates.
-                    if (posDiff > 4)
+                    if (posDiff > 10)
                     {
                         // Try again, maybe the previous one just didn't have the anchor
                         if (hasAnchor)
@@ -246,7 +258,7 @@ namespace Timeline.WorldRecording.StateCapturers
                             posDiff = GetMargin(prevFramePos, nextFramePos);
 
                             // Nope we were right all along.
-                            if (posDiff > 4)
+                            if (posDiff > 10)
                             {
                                 return;
                             }
@@ -262,7 +274,7 @@ namespace Timeline.WorldRecording.StateCapturers
                                 posDiff = GetMargin(prevFramePos, nextFramePos);
 
                                 // Nope we were right all along.
-                                if (posDiff > 4)
+                                if (posDiff > 10)
                                 {
                                     return;
                                 }
