@@ -79,6 +79,7 @@ namespace Timeline.WorldRecording.Recorders
             RegisterComponentManager<BehaviorBaseNavComponentManager>();
             RegisterComponentManager<SLZLaserPointerComponentManager>();
             RegisterComponentManager<SimpleSFXComponentManager>();
+            RegisterComponentManager<AudioSourceComponentManager>();
         }
 
         private void RegisterComponentManager<T>() where T : ComponentManager {

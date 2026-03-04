@@ -57,13 +57,16 @@ namespace Timeline.WorldRecording.Recorders
                 recentlySpawned = go;
 
                 targetObject = recentlySpawned;
+
                 AttemptModifyParticleSystem(targetObject);
 
-                Poolee poolee = recentlySpawned.GetComponentInChildren<Poolee>();
-                if (poolee) {
-                    poolee.SpawnableCrate = null;
-                    poolee.transform.localScale = scale;
-                }
+                recentlySpawned.transform.localScale = scale;
+
+                //Poolee poolee = recentlySpawned.GetComponentInChildren<Poolee>();
+                //if (poolee) {
+                //    poolee.SpawnableCrate = null;
+                //    poolee.transform.localScale = scale;
+                //}
 
                 
             });

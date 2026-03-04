@@ -17,6 +17,7 @@ using Timeline.Serialization.Registry;
 using Timeline.Settings;
 using Timeline.Utils;
 using Timeline.WorldRecording;
+using Timeline.WorldRecording.Extras.Impl;
 using Timeline.WorldRecording.Extras.Visual;
 using Timeline.WorldRecording.Recorders;
 using Timeline.WorldRecording.StateCapturers;
@@ -26,7 +27,7 @@ using static MelonLoader.MelonLogger;
 namespace Timeline
 {
     public static class TimelineModInfo {
-        public const string VERSION = "0.5.0";
+        public const string VERSION = "0.5.1";
     }
     public class TimelineMainClass : MelonMod
     {
@@ -81,6 +82,9 @@ namespace Timeline
         private void InitializeTimeline() {
             RuntimeCapturedAssets.CaptureAssets();
 
+            // TODO: Move this somewhere else
+            AudioSourceComponentManager.cachedAudioSources.Clear();
+
             if (!HelperMethods.IsAndroid())
             {
 
@@ -113,16 +117,6 @@ namespace Timeline
                     InitializeTimeline();
                     waitingForInit = false;
                 }
-            }
-
-            if (Input.GetKeyDown(KeyCode.K)) {
-                RigidbodyCapturer.velocityStrengthMult -= 1f;
-                MelonLogger.Msg(RigidbodyCapturer.velocityStrengthMult);
-            }
-            if (Input.GetKeyDown(KeyCode.L))
-            {
-                RigidbodyCapturer.velocityStrengthMult += 1f;
-                MelonLogger.Msg(RigidbodyCapturer.velocityStrengthMult);
             }
 
             if (timelineHolder != null)
@@ -166,6 +160,14 @@ namespace Timeline
 
                 if (!HelperMethods.IsAndroid()) {
                     timelineHolder.Update();
+                }
+
+                if (WorldPlayer.recording && GlobalSettings.stopRecordingBind)
+                {
+                    if (Player.LeftController.GetMenuTap() && !Player.LeftHand.HasAttachedObject())
+                    {
+                        timelineHolder.worldPlayer.Stop();
+                    }
                 }
             }
         }

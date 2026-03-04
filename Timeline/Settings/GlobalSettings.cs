@@ -18,6 +18,7 @@ namespace Timeline.Settings
         public static bool moveMouthToMicrophone = true;
         public static bool hidePlaybackPouches = false;
         public static bool hidePlaybackBodylog = false;
+        public static bool stopRecordingBind = true;
         public static float eyePeek = 0f;
         public static string referenceTrackName = "None";
         public static string targetMic = null;
@@ -35,6 +36,7 @@ namespace Timeline.Settings
         static MelonPreferences_Entry<bool> MP_moveMouthToMicrophone;
         static MelonPreferences_Entry<bool> MP_hidePlaybackPouches;
         static MelonPreferences_Entry<bool> MP_hidePlaybackBodylog;
+        static MelonPreferences_Entry<bool> MP_stopRecordingBind;
         static MelonPreferences_Entry<float> MP_eyePeek;
         static MelonPreferences_Entry<string> MP_referenceTrackName;
         static MelonPreferences_Entry<string> MP_targetMic;
@@ -51,6 +53,7 @@ namespace Timeline.Settings
             MP_moveMouthToMicrophone = category.CreateEntry<bool>("moveMouthToMicrophone", true);
             MP_hidePlaybackPouches = category.CreateEntry<bool>("hidePlaybackPouches", false);
             MP_hidePlaybackBodylog = category.CreateEntry<bool>("hidePlaybackBodylog", false);
+            MP_stopRecordingBind = category.CreateEntry<bool>("stopRecordingBind", true);
 
             MP_eyePeek = category.CreateEntry<float>("eyePeek", 0f);
 
@@ -73,6 +76,7 @@ namespace Timeline.Settings
             moveMouthToMicrophone = MP_moveMouthToMicrophone.Value;
             hidePlaybackPouches = MP_hidePlaybackPouches.Value;
             hidePlaybackBodylog = MP_hidePlaybackBodylog.Value;
+            stopRecordingBind = MP_stopRecordingBind.Value;
 
             eyePeek = MP_eyePeek.Value;
 
@@ -99,6 +103,7 @@ namespace Timeline.Settings
             MP_moveMouthToMicrophone.Value = moveMouthToMicrophone;
             MP_hidePlaybackPouches.Value = hidePlaybackPouches;
             MP_hidePlaybackBodylog.Value = hidePlaybackBodylog;
+            MP_stopRecordingBind.Value = stopRecordingBind;
 
             MP_eyePeek.Value = eyePeek;
 

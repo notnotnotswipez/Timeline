@@ -9,6 +9,7 @@ using Timeline.Serialization;
 using Timeline.Serialization.Binary;
 using Timeline.WorldRecording.Extras.Impl;
 using Timeline.WorldRecording.Recorders;
+using UnityEngine;
 
 namespace Timeline.WorldRecording.Events.BuiltIn
 {
@@ -70,6 +71,11 @@ namespace Timeline.WorldRecording.Events.BuiltIn
 
                     marrowEntityRecorder.FetchComponentManager<SimpleSFXComponentManager>().PlaySound(sfxIndex, clipIndex);
                     break;
+                case ComponentOneshots.AUDIOSOURCE_PLAY:
+                    byte sourceIndex = secondaryData;
+
+                    marrowEntityRecorder.FetchComponentManager<AudioSourceComponentManager>().PlaySound(sourceIndex);
+                    break;
             }
         }
 
@@ -79,6 +85,7 @@ namespace Timeline.WorldRecording.Events.BuiltIn
     public enum ComponentOneshots : byte {
         BEHAVIORBASENAV_KILL = 0,
         LASER_TOGGLE = 1,
-        SIMPLE_SFX = 2
+        SIMPLE_SFX = 2,
+        AUDIOSOURCE_PLAY = 3
     }
 }

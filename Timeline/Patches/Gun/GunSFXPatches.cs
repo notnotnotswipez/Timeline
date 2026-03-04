@@ -13,6 +13,8 @@ using Timeline.WorldRecording.Events.BuiltIn;
 using Il2CppSLZ.SFX;
 using Timeline.WorldRecording.Extras.Impl;
 using MelonLoader;
+using UnityEngine;
+using Il2CppSLZ.Marrow.Utilities;
 
 namespace Timeline.Patches.Gun
 {
@@ -75,6 +77,27 @@ namespace Timeline.Patches.Gun
                     if (gunRecorder.recording)
                     {
                         gunRecorder.AddEvent(WorldPlayer.playHead, new GunEvent(GunEventTypes.MAG_DROP_SFX));
+                    }
+                }
+            }
+        }
+    }
+
+    [HarmonyPatch(typeof(AudioSource), nameof(AudioSource.Play), new Type[0] { })]
+    public class AudioSourcePlayPatch
+    {
+        public static void Postfix(AudioSource __instance)
+        {
+            if (WorldPlayer.recording)
+            {
+                int audioSourceInstanceId = __instance.GetInstanceID();
+                if (AudioSourceComponentManager.cachedAudioSources.ContainsKey(audioSourceInstanceId)) {
+                    ObjectRecorder cachedRecorder = AudioSourceComponentManager.cachedAudioSources[audioSourceInstanceId];
+
+                    if (__instance.clip && cachedRecorder is GunRecorder) {
+                        GunRecorder gunRecorder = (GunRecorder) cachedRecorder;
+
+                        gunRecorder.AddEvent(WorldPlayer.playHead, new OneshotComponentEvent(ComponentOneshots.AUDIOSOURCE_PLAY, (byte) gunRecorder.FetchComponentManager<AudioSourceComponentManager>().GetIndexFromComponent(__instance)));
                     }
                 }
             }

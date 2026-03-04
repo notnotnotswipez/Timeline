@@ -259,6 +259,12 @@ namespace Timeline.Menu
                 GlobalSettings.Save();
             });
 
+            page.CreateBool("Stop Recording Bind", Color.yellow, GlobalSettings.stopRecordingBind, (b) =>
+            {
+                GlobalSettings.stopRecordingBind = b;
+                GlobalSettings.Save();
+            });
+
             page.CreateFloat("Eye Peek", Color.yellow, GlobalSettings.eyePeek, 0.05f, 0f, 10f, (f) =>
             {
                 GlobalSettings.eyePeek = f;
