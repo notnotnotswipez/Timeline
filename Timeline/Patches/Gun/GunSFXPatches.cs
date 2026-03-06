@@ -91,13 +91,15 @@ namespace Timeline.Patches.Gun
             if (WorldPlayer.recording)
             {
                 int audioSourceInstanceId = __instance.GetInstanceID();
+
+
                 if (AudioSourceComponentManager.cachedAudioSources.ContainsKey(audioSourceInstanceId)) {
                     ObjectRecorder cachedRecorder = AudioSourceComponentManager.cachedAudioSources[audioSourceInstanceId];
 
-                    if (__instance.clip && cachedRecorder is GunRecorder) {
+                    if (cachedRecorder.recording && __instance.clip && cachedRecorder is GunRecorder)
+                    {
                         GunRecorder gunRecorder = (GunRecorder) cachedRecorder;
-
-                        gunRecorder.AddEvent(WorldPlayer.playHead, new OneshotComponentEvent(ComponentOneshots.AUDIOSOURCE_PLAY, (byte) gunRecorder.FetchComponentManager<AudioSourceComponentManager>().GetIndexFromComponent(__instance)));
+                        gunRecorder.AddEvent(WorldPlayer.playHead, new AudioSourceManualPlayEvent((byte) gunRecorder.FetchComponentManager<AudioSourceComponentManager>().GetIndexFromComponent(__instance), __instance.clip.name));
                     }
                 }
             }

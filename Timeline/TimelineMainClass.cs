@@ -27,7 +27,7 @@ using static MelonLoader.MelonLogger;
 namespace Timeline
 {
     public static class TimelineModInfo {
-        public const string VERSION = "0.5.1";
+        public const string VERSION = "0.5.2";
     }
     public class TimelineMainClass : MelonMod
     {

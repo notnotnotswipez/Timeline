@@ -33,6 +33,7 @@ namespace Timeline.Serialization
         BODYLOG_TOGGLE_EVENT = 6,
         RIG_RECORDER_ANCHOR = 7,
         MARROW_ENTITY_RECORDER_PIN = 8,
-        MARROW_ENTITY_CROSS_PIN = 9
+        MARROW_ENTITY_CROSS_PIN = 9,
+        AUDIO_SOURCE_MANUAL_PLAY = 10
     }
 }

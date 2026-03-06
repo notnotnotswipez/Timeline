@@ -26,6 +26,7 @@ namespace Timeline.Serialization.Registry
             eventTypeRegistry.Add((byte) TimelineSerializedEvents.BODYLOG_TOGGLE_EVENT, typeof(BodyLogToggleEvent));
             eventTypeRegistry.Add((byte) TimelineSerializedEvents.RIG_RECORDER_ANCHOR, typeof(RigRecorderAnchorEvent));
             eventTypeRegistry.Add((byte) TimelineSerializedEvents.MARROW_ENTITY_RECORDER_PIN, typeof(MarrowEntityRecorderPinEvent));
+            eventTypeRegistry.Add((byte) TimelineSerializedEvents.AUDIO_SOURCE_MANUAL_PLAY, typeof(AudioSourceManualPlayEvent));
 
             recorderTypeRegistry.Add((byte) TimelineSerializedTypes.RIGMANAGER_RECORDER, typeof(RigmanagerRecorder));
             recorderTypeRegistry.Add((byte) TimelineSerializedTypes.MARROW_ENTITY_RECORDER, typeof(MarrowEntityRecorder));
